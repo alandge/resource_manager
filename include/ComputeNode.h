@@ -7,7 +7,14 @@
 #ifndef COMPUTENODE_H
 #define COMPUTENODE_H
 #include <list>
+#include <vector>
 #include "Job.h"
+
+typedef int NodeId_t;
+typedef std::list<Job*> JobList;
+typedef std::vector< std::pair<NodeId_t, int> > NodeResourcePairs; 
+typedef std::pair<NodeId_t, Job*> NodeJobPair;
+typedef std::vector< NodeJobPair > NodeJobPairs; 
 
 class ComputeNode {
 
@@ -21,14 +28,14 @@ public:
 
   int id() { return mId; }
 
-  //! place a job to this node
-  void addJob(Job& job);
+  //! run a job to this node
+  void runJob(Job* job);
 
   //! return free resources on the node
   int availableResources() { return mAvailableResources; }
 
   //! Access to running jobs on this node
-  const std::list<Job*> runningJobs() { return mJobs; }
+  const JobList runningJobs() { return mJobs; }
 
   //! Update the state of the running jobs after a timestep.
   //! Terminate jobs that are complete. If there is change in the number of
@@ -37,10 +44,10 @@ public:
 
 private:
   
-  int mId;
+  NodeId_t mId;
   int mNumResources;
   int mAvailableResources;
-  std::list<Job*> mJobs;
+  JobList mJobs;
 
 };
 

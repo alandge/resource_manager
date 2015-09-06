@@ -9,6 +9,7 @@
 #define INPUTGENERATOR_H
 
 #include <vector>
+typedef std::vector< std::pair<int, int> > JobResourceTimePairs; 
 
 class InputGenerator {
 
@@ -23,7 +24,7 @@ public:
   ~InputGenerator() {}
 
 
-  std::vector< std::pair<int, int> > generateJobs();
+  JobResourceTimePairs* generateJobs();
 
 
 private:

@@ -7,6 +7,7 @@
  */
 
 #include "ComputeCluster.h"
+#include <iostream>
 
 ComputeCluster::ComputeCluster(int num_nodes, int resources_per_node) {
 
@@ -28,18 +29,38 @@ ComputeCluster::~ComputeCluster() {
   }
 }
 
-std::vector< std::pair<int,int> > ComputeCluster::updateState() {
+NodeResourcePairs* ComputeCluster::updateState() {
 
-  std::vector< std::pair<int,int> > status;
+  NodeResourcePairs* status = new NodeResourcePairs();
 
   for (int i=0; i<mNodes.size(); i++) {
   
     if (mNodes[i]->updateState()) {
-      status.push_back(std::pair<int, int> (mNodes[i]->id(), 
+      status->push_back(std::pair<int, int> (mNodes[i]->id(), 
                                        mNodes[i]->availableResources()));
     }
   }
 
   return status;
+}
+
+
+void ComputeCluster::runJobs(NodeJobPairs* scheduled_jobs) {
+  
+  NodeJobPairs::iterator it;
+  for (it=scheduled_jobs->begin(); it!=scheduled_jobs->end(); it++) {
+  
+    mNodes[it->first]->runJob(it->second);
+  }
+}
+
+void ComputeCluster::printClusterState() {
+
+  for (int i=0; i<mNodes.size(); i++ ) {
+  
+    std::cout << "(" << mNodes[i]->id() << ", " 
+              << mNodes[i]->availableResources() << ")  "; 
+  }
+  std::cout << "\n";
 }
 

@@ -6,6 +6,7 @@
 #include "ComputeNode.h"
 #include "Job.h"
 #include <cassert>
+#include <iostream>
 
 
 bool ComputeNode::updateState() {
@@ -16,26 +17,30 @@ bool ComputeNode::updateState() {
     return true;
   }
 
-  std::list<Job*>::iterator it;
+  JobList::iterator it = mJobs.begin();
 
-  for(it = mJobs.begin(); it != mJobs.end(); it++) {
+  while( it != mJobs.end()) {
     (*it)->updateTime();
-    if((*it)->status() == EXECUTED) {
-      mJobs.erase(it);
+    //if((*it)->status() == COMPLETED) {
+    if((*it)->timeRemaining()==0) {
       mAvailableResources+= (*it)->numResources();
       status_changed = true;
+      mJobs.erase(it++);
     }
+    else
+      it++;
   }
 
   return status_changed;
   
 }
 
-void ComputeNode::addJob(Job& job) {
+void ComputeNode::runJob(Job* job) {
   
-  assert(job.duration() <= mAvailableResources);
+  assert(job->numResources() <= mAvailableResources);
 
-  job.status(RUNNING);
-  mJobs.push_back(&job);
+  job->status(RUNNING);
+  mJobs.push_back(job);
+  mAvailableResources-=job->numResources();
 
 }

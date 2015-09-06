@@ -7,13 +7,18 @@
 #ifndef JOB_H
 #define JOB_H
 
-enum{ QUEUED = 0, RUNNING, EXECUTED};
+typedef int JobId_t;
+
+enum{ QUEUED = 0, RUNNING, COMPLETED};
 
 class Job{
 public:
 
-  Job() {}
+  Job(int id, int num_resources, int duration);
+
   ~Job() {}
+
+  int id() { return mId; }
 
   //! set the status to running, queued or executed
   void status(int state) { mStatus = state; } 
@@ -31,7 +36,7 @@ public:
 
 private:
 
-  int mId;
+  JobId_t mId;
   int mNumResources;
   int mDuration;
   int mExecutionTime;

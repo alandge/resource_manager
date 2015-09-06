@@ -9,6 +9,7 @@
 
 #include "InputGenerator.h"
 #include "ComputeCluster.h"
+#include "Scheduler.h"
 
 class Simulator {
   public:
@@ -16,7 +17,7 @@ class Simulator {
   ~Simulator() {}
 
   void initialize(int num_timesteps, int time_delay, InputGenerator* inp_gen,
-                  ComputeCluster* cluster);
+                  ComputeCluster* cluster, Scheduler* scheduler);
 
   void run();
 
@@ -25,6 +26,10 @@ private:
   int mTimeDelay;
   InputGenerator* mInputGen;
   ComputeCluster* mCluster;
+  Scheduler* mScheduler;
+  std::list<Job*> mJobs;
+
+  void RemoveCompletedJobs();
 };
 
 

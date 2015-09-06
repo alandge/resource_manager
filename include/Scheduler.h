@@ -8,11 +8,9 @@
 #define SCHEDULER_H
 
 #include <queue>
+#include "Job.h"
+#include "ComputeNode.h"
 
-struct NodeStatus{
-  int availableResources;
-  int nodeId;
-};
 
 class Scheduler {
 
@@ -21,20 +19,21 @@ public:
   Scheduler() {}
   ~Scheduler() {}
 
-  std::vector< std::pair<int, Job*> >* getScheduledJobs() {}
+  virtual NodeJobPairs* getScheduledJobs(  
+                              std::vector<Job*>& input_jobs,
+                              NodeResourcePairs* cluster_status) = 0;
 
+  virtual void printJobQ() = 0;
 
-private:
-
-  virtual void scheduleJobs() {}
+protected:
+  //! Scheduled jobs with tuples(nodeId, Job)
+  NodeJobPairs* mScheduledJobs;
 
   std::queue<Job*> mJobQ;
 
-  //! Scheduled jobs with tuples(nodeId, Job)
-  std::vector< std::pair<int, Job*> > *mScheduledJobs;
+   //! Scheduler maintains state of every node in terms of available resources
+  //std::vector<NodeStatus> mNodesStatus;
 
-  //! Scheduler maintains state of every node in terms of available resources
-  std::vector<NodeStatus> mNodesStatus;
 };
 
 

@@ -11,16 +11,21 @@
 #include <vector>
 #include "ComputeNode.h"
 
+
 class ComputeCluster{
 
 public:
   ComputeCluster(int num_nodes, int resources_per_node);
   ~ComputeCluster();
 
+  void runJobs(NodeJobPairs* scheduled_jobs);
+
   //! returns the changed state of any of the compute nodes in terms of a
   //! tuple(nodeId, avail_resources). We can have multiple of such updates in a
   //! timestep, hence returing a vector of tuples
-  std::vector< std::pair<int, int> > updateState();
+ NodeResourcePairs* updateState();
+
+ void printClusterState();
 
 private:
   int mNumNodes;
