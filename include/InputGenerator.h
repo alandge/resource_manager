@@ -9,10 +9,8 @@
 #define INPUTGENERATOR_H
 
 #include <vector>
-using namespace std;
 
 class InputGenerator {
-
 
 public:
   InputGenerator(int num_compute_nodes, int max_res_per_node, 
@@ -25,7 +23,7 @@ public:
   ~InputGenerator() {}
 
 
-  vector< pair<int, int> > generateJobs();
+  std::vector< std::pair<int, int> > generateJobs();
 
 
 private:

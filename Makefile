@@ -2,7 +2,7 @@ SRC_DIR = ./src
 INC_DIR = ./include
 #LIB_DIR = ./lib
 BIN_DIR = ./bin
-OBJ = $(addprefix $(BIN_DIR)/, InputGenerator.o Simulator.o)
+OBJ = $(addprefix $(BIN_DIR)/, InputGenerator.o Job.o Simulator.o ComputeNode.o ComputeCluster.o )
 CXX = g++
 CFLAGS = -I $(INC_DIR)
 DEPS = $(INC_DIR)/%.h
@@ -19,9 +19,6 @@ $(BIN_DIR)/%.o : $(SRC_DIR)/%.cpp $(DEPS)
 
 run_simulator: $(OBJ)
 	$(CXX) -Wall -o run_simulator run_simulator.cpp $(OBJ) $(CFLAGS)
-
-
-
 
 clean: 
 	rm -f -r run_simulator

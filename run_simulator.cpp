@@ -2,6 +2,7 @@
 #include <iostream>
 #include "Simulator.h"
 #include "InputGenerator.h"
+#include "Scheduler.h"
 
 using namespace std;
 
@@ -19,10 +20,12 @@ int main(int argc, char* argv[]) {
 //  int max_time_per_job = atoi(argv[4]);
  
   Simulator s;
-  InputGenerator inp_gen(8,32,4,16);
-  
+  InputGenerator* inp_gen = new InputGenerator(8,32,4,16);
+  ComputeCluster* cluster = new ComputeCluster(8, 32);
+  Scheduler* schedular = new Scheduler();
+
   //cout << "Num nodes: " << mNumComputeNodes << "\n";
-  s.initialize(10, 1, &inp_gen);
+  s.initialize(10, 1, inp_gen, cluster);
   
   s.run();
  

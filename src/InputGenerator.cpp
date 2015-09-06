@@ -9,14 +9,12 @@
 #include <random>
 #include "InputGenerator.h"
 
-using namespace std;
-
 //! Generate a vector of job tuples (resources, timesteps) when invoked
 // can extend this api to select different distributions for jobs, time and
 // resources
-vector< pair<int, int> > InputGenerator::generateJobs() {
+std::vector< std::pair<int, int> > InputGenerator::generateJobs() {
 
-  vector < pair<int, int> > jobs;
+  std::vector < std::pair<int, int> > jobs;
 
   // Randomly generate number of jobs for this timestep
   unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
@@ -36,7 +34,7 @@ vector< pair<int, int> > InputGenerator::generateJobs() {
     // randomly generate time required for this job
     int job_time = time_dist(generator);//rand() % mMaxTimePerJob + 1;
 
-    jobs.push_back(pair<int, int> (resources, job_time));
+    jobs.push_back(std::pair<int, int> (resources, job_time));
   }
 
   return jobs;
