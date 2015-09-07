@@ -7,6 +7,12 @@
 #include "Job.h"
 #include <cassert>
 #include <iostream>
+#include <cstdlib>
+
+ComputeNode::ComputeNode(int id, int num_resources) : 
+                        mId(id), mNumResources(num_resources) {
+  mAvailableResources = mNumResources;
+}
 
 
 bool ComputeNode::updateState() {

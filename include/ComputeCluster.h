@@ -25,6 +25,8 @@ public:
   //! timestep, hence returing a vector of tuples
  NodeResourcePairs* updateState();
 
+ int numNodes() {return mNumNodes;}
+
  void printClusterState();
 
 private:

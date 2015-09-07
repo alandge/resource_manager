@@ -16,7 +16,8 @@ class Simulator {
   Simulator() {}
   ~Simulator() {}
 
-  void initialize(int num_timesteps, int time_delay, InputGenerator* inp_gen,
+  void initialize(int num_timesteps, int time_delay,
+                  int max_time_between_jobs, InputGenerator* inp_gen,
                   ComputeCluster* cluster, Scheduler* scheduler);
 
   void run();
@@ -24,6 +25,7 @@ class Simulator {
 private:
   int mNumTimesteps;
   int mTimeDelay;
+  int mMaxTimeBetweenJobs;
   InputGenerator* mInputGen;
   ComputeCluster* mCluster;
   Scheduler* mScheduler;

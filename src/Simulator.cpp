@@ -7,18 +7,36 @@
 #include <iostream>
 #include <chrono>
 #include <thread>
+#include <random>
 #include "Simulator.h"
 
 void Simulator::initialize(int num_timesteps, int time_delay, 
+                           int max_time_between_jobs, 
                            InputGenerator* inp_gen,
                            ComputeCluster* cluster, 
                            Scheduler* scheduler) {
   
   mNumTimesteps = num_timesteps;
   mTimeDelay = time_delay;
+  mMaxTimeBetweenJobs = max_time_between_jobs;
   mInputGen = inp_gen;
   mCluster = cluster;
   mScheduler = scheduler;
+
+  int job_count = 0;
+  NodeJobPairs initial_jobs;
+  for (int i=0; i<mCluster->numNodes(); i++) {
+    JobResourceTimePair job_time_pair = mInputGen->generateJob();
+    
+    Job* job = new Job(job_count++, job_time_pair.first, job_time_pair.second);
+
+    initial_jobs.push_back(std::pair<int, Job*>(i, job));
+  }
+
+  mCluster->runJobs(&initial_jobs);
+
+  std::cout << "Initial Cluster State (nodeId, avail_res) :: ";
+  mCluster->printClusterState();
 }
 
 
@@ -37,39 +55,55 @@ void Simulator::RemoveCompletedJobs() {
 
 void Simulator::run() {
 
-  int job_count = 0;
+  int job_count = mCluster->numNodes();
   int max_jobs = 8;
+
+  // generate seed for random number generation
+  unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+  std::default_random_engine generator(seed);
+  std::uniform_int_distribution<int> time_dist(1,mMaxTimeBetweenJobs);
+  int time_between_jobs =1;
+
   //for (int i=0; i<mNumTimesteps; i++) {
   for (int i=0; ; i++) {
 
-
-    std::cout << "Time : " << i+1 << "\n";
+    std::cout << "\nTime : " << i+1 ;
     std::vector<Job*> new_jobs;
+    
+    if ((--time_between_jobs == 0) && (job_count < max_jobs)) {
+      JobResourceTimePair job_time_pair = mInputGen->generateJob();
 
-    if (job_count < max_jobs) {
-      JobResourceTimePairs* job_time_pairs = mInputGen->generateJobs();
-      JobResourceTimePairs::iterator j_it;
+      std::cout << "\nInput Job (jobId, resources, time):: ";
+            
+      Job* job = new Job(job_count++, job_time_pair.first, job_time_pair.second);
+      mJobs.push_back(job);
+      new_jobs.push_back(job);
 
-      std::cout << "Input Jobs (jobId, resources, time):: ";
-      for (j_it=job_time_pairs->begin(); j_it != job_time_pairs->end(); j_it++ ) {
-        
-        Job* job = new Job(job_count++,  j_it->first,  j_it->second);
-        mJobs.push_back(job);
-        new_jobs.push_back(job);
+      std::cout << "(" << job->id() << ", " << job->numResources() 
+                << ", " << job->duration() << ")  ";
 
-        std::cout << "(" << job->id() << ", " << job->numResources() 
-                  << ", " << job->duration() << ")  ";
-      }
+      // randomly generate time delay in between input jobs
 
-      delete job_time_pairs;
-      std::cout << "\n";
+      time_between_jobs = time_dist(generator);
     }
+    //else {
+      //time_between_jobs--;
+    //}
+
+    std::cout << "\n";
 
     NodeResourcePairs* cluster_state = mCluster->updateState(); 
     NodeResourcePairs::iterator it;
 
-     std::cout << "Cluster State (nodeId, avail_res) :: ";
+    std::cout << "Cluster State (nodeId, avail_res) :: ";
     mCluster->printClusterState();
+
+   // for (it=cluster_state->begin(); it!=cluster_state->end(); it++) {
+   //   std::cout << "("  << it->first 
+   //             << ", " << it->second << ")  ";
+   // }
+
+   // std::cout << "\n\n";
 
    
     // Schedule jobs
@@ -89,13 +123,7 @@ void Simulator::run() {
 
      std::cout << "Cluster State (nodeId, avail_res) :: ";
     mCluster->printClusterState();
-    //for (it=cluster_state->begin(); it!=cluster_state->end(); it++) {
-    //  std::cout << "("  << it->first 
-    //            << ", " << it->second << ")  ";
-    //}
-
-    //std::cout << "\n\n";
-    
+        
     // Remove completed jobs
     RemoveCompletedJobs();
 

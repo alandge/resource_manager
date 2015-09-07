@@ -20,12 +20,12 @@ int main(int argc, char* argv[]) {
 //  int max_time_per_job = atoi(argv[4]);
  
   Simulator s;
-  InputGenerator* inp_gen = new InputGenerator(2,4,2,4);
+  InputGenerator* inp_gen = new InputGenerator(2,4,2,10);
   ComputeCluster* cluster = new ComputeCluster(2, 4);
   Scheduler* scheduler = new FcfsScheduler();
 
-  //cout << "Num nodes: " << mNumComputeNodes << "\n";
-  s.initialize(10, 1, inp_gen, cluster, scheduler);
+  cout << "Num nodes: " << cluster->numNodes() << "\n";
+  s.initialize(10, 1, 3, inp_gen, cluster, scheduler);
   
   s.run();
  

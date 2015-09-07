@@ -10,7 +10,7 @@
 
 #include <vector>
 typedef std::vector< std::pair<int, int> > JobResourceTimePairs; 
-
+typedef std::pair<int, int> JobResourceTimePair;
 class InputGenerator {
 
 public:
@@ -24,7 +24,7 @@ public:
   ~InputGenerator() {}
 
 
-  JobResourceTimePairs* generateJobs();
+  JobResourceTimePair generateJob();
 
 
 private:

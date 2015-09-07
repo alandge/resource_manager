@@ -19,10 +19,7 @@ typedef std::vector< NodeJobPair > NodeJobPairs;
 class ComputeNode {
 
 public:
-  ComputeNode(int id, int num_resources) : mId(id), mNumResources(num_resources) 
-  {
-    mAvailableResources = mNumResources;
-  }
+  ComputeNode(int id, int num_resources);
 
   ~ComputeNode() {}
 

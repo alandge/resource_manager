@@ -49,7 +49,6 @@ void ComputeCluster::runJobs(NodeJobPairs* scheduled_jobs) {
   
   NodeJobPairs::iterator it;
   for (it=scheduled_jobs->begin(); it!=scheduled_jobs->end(); it++) {
-  
     mNodes[it->first]->runJob(it->second);
   }
 }
