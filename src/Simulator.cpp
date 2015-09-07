@@ -50,14 +50,15 @@ void Simulator::run() {
       JobResourceTimePairs* job_time_pairs = mInputGen->generateJobs();
       JobResourceTimePairs::iterator j_it;
 
-      std::cout << "Input Jobs :: ";
+      std::cout << "Input Jobs (jobId, resources, time):: ";
       for (j_it=job_time_pairs->begin(); j_it != job_time_pairs->end(); j_it++ ) {
         
         Job* job = new Job(job_count++,  j_it->first,  j_it->second);
         mJobs.push_back(job);
         new_jobs.push_back(job);
 
-        std::cout << "(" << j_it->first << ", " << j_it->second << ")  ";
+        std::cout << "(" << job->id() << ", " << job->numResources() 
+                  << ", " << job->duration() << ")  ";
       }
 
       delete job_time_pairs;
@@ -67,20 +68,15 @@ void Simulator::run() {
     NodeResourcePairs* cluster_state = mCluster->updateState(); 
     NodeResourcePairs::iterator it;
 
-    std::cout << "Cluster State :: ";
+     std::cout << "Cluster State (nodeId, avail_res) :: ";
     mCluster->printClusterState();
-    //for (it=cluster_state->begin(); it!=cluster_state->end(); it++) {
-    //  std::cout << "("  << it->first 
-    //            << ", " << it->second << ")  ";
-    //}
 
-    //std::cout << "\n\n";
-
+   
     // Schedule jobs
     NodeJobPairs* scheduled_jobs = mScheduler->getScheduledJobs(new_jobs, 
                                                                 cluster_state);
     NodeJobPairs::iterator sj_it;
-    std::cout << "Scheduled Jobs (NodeId, JobId) :: ";
+    std::cout << "Scheduled Jobs (nodeId, jobId) :: ";
     for (sj_it=scheduled_jobs->begin(); sj_it!=scheduled_jobs->end(); sj_it++) {
       std::cout << "("  << sj_it->first 
                 << ", " << sj_it->second->id() << ")  ";
@@ -91,6 +87,14 @@ void Simulator::run() {
     // Run jobs
     mCluster->runJobs(scheduled_jobs);
 
+     std::cout << "Cluster State (nodeId, avail_res) :: ";
+    mCluster->printClusterState();
+    //for (it=cluster_state->begin(); it!=cluster_state->end(); it++) {
+    //  std::cout << "("  << it->first 
+    //            << ", " << it->second << ")  ";
+    //}
+
+    //std::cout << "\n\n";
     
     // Remove completed jobs
     RemoveCompletedJobs();

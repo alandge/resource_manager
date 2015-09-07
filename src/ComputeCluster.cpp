@@ -54,6 +54,8 @@ void ComputeCluster::runJobs(NodeJobPairs* scheduled_jobs) {
   }
 }
 
+
+
 void ComputeCluster::printClusterState() {
 
   for (int i=0; i<mNodes.size(); i++ ) {

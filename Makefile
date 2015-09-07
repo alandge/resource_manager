@@ -4,8 +4,8 @@ INC_DIR = ./include
 BIN_DIR = ./bin
 OBJ = $(addprefix $(BIN_DIR)/, InputGenerator.o Job.o Simulator.o \
 			       ComputeNode.o ComputeCluster.o FcfsScheduler.o)
-CXX = g++
-CFLAGS = -I $(INC_DIR)
+CXX = c++ 
+CFLAGS = -std=c++11 -stdlib=libc++ -I $(INC_DIR)
 DEPS = $(INC_DIR)/%.h
 
 all: run_simulator

@@ -1,0 +1,46 @@
+More Ideas that can be implemented:
+
+1. Input Simulation:
+
+   The framework has a the ability to pick the distribution for the random
+   number generators that can allow us to simulate various real world job
+   request distributions. The basic implementation uses the uniform distribution
+   to generate jobs, but real world scenarios can be modelled using different
+   distributions (eg. exponential).
+
+
+2. Collection of statistics:
+
+  a) Job Statistics: To understand distribution of jobs which can be fed to the
+  scheduling algo for taking decisions tuned to the job workload
+
+  b) Node Statistics: Per node utilization over time or aggregate over certain
+  time period
+
+  c) Cluster Statistics: Cluster level statistics aggregated over all the nodes
+  in the cluster. Again can be done per time step or over a period of time. Can
+  be used to get an understanding of the behavior of the scheduling algorithm
+
+  d) Scheduling Algorithm Statistics: length of the jobQ at any given time or
+  average over a period of time. Time taken to make a decision on scheduling to
+  get the efficiency of the algorithm.
+
+
+  The above can be written to files. In a real world situation every node would
+  be storing this information to the file system or we can explore ways in which
+  this information can be aggregated before writing to file to reduce overhead
+  added to the system. In the current setup, the above statistics are written to
+  csv files which can be used for generating various plots in matplotlib, excel,
+  etc. But this is not a scalable format and we can explore better formats for
+  storage, retrieval and analysis of this data. 
+
+  Also, the above statistics is not an exhaustive list and many more statistics
+  or performance metrics can be extracted from the cluster at various levels
+  ranging from hardware performance metrics (eg. cycles spent in every function,
+  application, cache behaviours, etc.) to more application specific metrics in
+  terms requirements and actual utilization of cluster resources. These metrics
+  can be exploited to identify potential optimization strategies in terms of
+  performance, utilization, power optimization, etc.
+
+
+
