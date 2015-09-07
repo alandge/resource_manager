@@ -14,6 +14,7 @@ Job::Job(int id, int num_resources, int duration) {
       mNumResources = num_resources;
       mDuration =duration;
       mExecutionTime = 0;
+      mWaitTime = 0;
       mStatus = QUEUED;
 }
 

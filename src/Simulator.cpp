@@ -64,11 +64,12 @@ void Simulator::RemoveCompletedJobs() {
 void Simulator::run() {
 
   int job_count = mCluster->numNodes();
-  int max_jobs = 8;
+  int max_jobs = 20;
 
   // generate seed for random number generation
   unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
   std::default_random_engine generator(seed);
+  //std::default_random_engine generator(0);
   std::uniform_int_distribution<int> time_dist(1,mMaxTimeBetweenJobs);
   int time_between_jobs =1;
 
@@ -124,7 +125,7 @@ void Simulator::run() {
                 << ", " << sj_it->second->id() << ")  ";
     }
     std::cout << "\n";
-    //mScheduler->printJobQ();
+    mScheduler->printJobQ();
 
     // Run jobs
     mCluster->runJobs(scheduled_jobs);

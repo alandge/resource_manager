@@ -18,7 +18,7 @@ public:
     if (A->numResources() != B->numResources())
       return (A->numResources() < B->numResources());
     else
-      return (A->id() < B->id());
+      return (A->id() > B->id());
   }
 };
 

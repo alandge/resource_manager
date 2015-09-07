@@ -3,6 +3,7 @@
 #include "Simulator.h"
 #include "InputGenerator.h"
 #include "FcfsScheduler.h"
+#include "BestFitScheduler.h"
 
 using namespace std;
 
@@ -20,14 +21,15 @@ int main(int argc, char* argv[]) {
 //  int max_time_per_job = atoi(argv[4]);
  
   Simulator s;
-  InputGenerator* inp_gen = new InputGenerator(2,4,2,10);
-  ComputeCluster* cluster = new ComputeCluster(2, 4);
-  Scheduler* scheduler = new FcfsScheduler();
+  InputGenerator* inp_gen = new InputGenerator(2,8,0,10);
+  ComputeCluster* cluster = new ComputeCluster(2, 8);
+  //Scheduler* scheduler = new FcfsScheduler();
+  Scheduler* scheduler = new BestFitScheduler( 1);
 
   cout << "Num nodes: " << cluster->numNodes() << "\n";
-  s.initialize(10, 1, 3, inp_gen, cluster, scheduler);
+  s.initialize(10, 1, 1, inp_gen, cluster, scheduler);
   
-  s.run();
+  s.run();  
  
   cout << "hello world\n";
   return 0;

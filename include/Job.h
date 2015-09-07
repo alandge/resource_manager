@@ -41,6 +41,7 @@ private:
   int mDuration;
   int mExecutionTime;
   int mStatus;
+  int mWaitTime;
 
 
 };
