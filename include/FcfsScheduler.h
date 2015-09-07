@@ -25,6 +25,9 @@ public:
 
 private:
 
+  //! queue for pending jobs
+  std::queue<Job*> mJobQ;
+
   //! Scheduler maintains state of every node in terms of available resources
   std::map<NodeId_t, int> mNodesStatus;
  

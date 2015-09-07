@@ -19,6 +19,8 @@ public:
   Scheduler() {}
   ~Scheduler() {}
 
+  virtual void initialize(int cluster_size, NodeResourcePairs* cluster_state) = 0;
+
   virtual NodeJobPairs* getScheduledJobs(  
                               std::vector<Job*>& input_jobs,
                               NodeResourcePairs* cluster_status) = 0;
@@ -29,7 +31,7 @@ protected:
   //! Scheduled jobs with tuples(nodeId, Job)
   NodeJobPairs* mScheduledJobs;
 
-  std::queue<Job*> mJobQ;
+  //std::queue<Job*> mJobQ;
 
    //! Scheduler maintains state of every node in terms of available resources
   //std::vector<NodeStatus> mNodesStatus;

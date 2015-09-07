@@ -26,6 +26,7 @@ public:
  NodeResourcePairs* updateState();
 
  int numNodes() {return mNumNodes;}
+ int numResourcesPerNode() {return mNumResourcesPerNode;}
 
  void printClusterState();
 

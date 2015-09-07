@@ -1,4 +1,4 @@
-/*Simulator.cpp 
+/*Simulator.cpp   
  *
  * Simulator for the resource manager
  *
@@ -25,15 +25,23 @@ void Simulator::initialize(int num_timesteps, int time_delay,
 
   int job_count = 0;
   NodeJobPairs initial_jobs;
+  NodeResourcePairs cluster_state;
+
+  int num_resources_per_node = mCluster->numResourcesPerNode();
+
   for (int i=0; i<mCluster->numNodes(); i++) {
     JobResourceTimePair job_time_pair = mInputGen->generateJob();
     
     Job* job = new Job(job_count++, job_time_pair.first, job_time_pair.second);
 
     initial_jobs.push_back(std::pair<int, Job*>(i, job));
+    cluster_state.push_back(
+        std::pair<int, int>(i, num_resources_per_node - job->numResources()));
   }
 
   mCluster->runJobs(&initial_jobs);
+
+  mScheduler->initialize(mCluster->numNodes(), &cluster_state);
 
   std::cout << "Initial Cluster State (nodeId, avail_res) :: ";
   mCluster->printClusterState();
@@ -116,7 +124,7 @@ void Simulator::run() {
                 << ", " << sj_it->second->id() << ")  ";
     }
     std::cout << "\n";
-    mScheduler->printJobQ();
+    //mScheduler->printJobQ();
 
     // Run jobs
     mCluster->runJobs(scheduled_jobs);
