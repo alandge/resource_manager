@@ -8,6 +8,14 @@
 #include <iostream>
 #include <cassert>
 
+
+FcfsScheduler::~FcfsScheduler() {
+   while (!mJobQ.empty()) {
+    mJobQ.pop();
+  }
+}
+
+
 void FcfsScheduler::initialize(int cluster_size, 
                                   NodeResourcePairs* cluster_state) {
   

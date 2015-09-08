@@ -8,8 +8,13 @@ More Ideas that can be implemented:
    to generate jobs, but real world scenarios can be modelled using different
    distributions (eg. exponential).
 
+2. Scheduling Algorithm:
+  
+   There are several scheduling algorithms proposed in the literature. The
+   choice of the scheduling algorithm is really driven by the constraints and
+   circumstances of the scenario.
 
-2. Collection of statistics:
+3. Collection of statistics:
 
   a) Job Statistics: To understand distribution of jobs which can be fed to the
   scheduling algo for taking decisions tuned to the job workload
@@ -29,9 +34,7 @@ More Ideas that can be implemented:
   The above can be written to files. In a real world situation every node would
   be storing this information to the file system or we can explore ways in which
   this information can be aggregated before writing to file to reduce overhead
-  added to the system. In the current setup, the above statistics are written to
-  csv files which can be used for generating various plots in matplotlib, excel,
-  etc. But this is not a scalable format and we can explore better formats for
+  added to the system. We can explore better formats for
   storage, retrieval and analysis of this data. 
 
   Also, the above statistics is not an exhaustive list and many more statistics

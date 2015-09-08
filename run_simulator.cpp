@@ -30,7 +30,7 @@ int main(int argc, char* argv[]) {
 
   std::cout << "max wait time: " << max_job_wait_time << "\n";
 
-  Simulator s;
+  Simulator* simulator = new Simulator();
   InputGenerator* inp_gen = new InputGenerator(num_nodes, num_res_per_node,
                                                max_time_per_job);
   ComputeCluster* cluster = new ComputeCluster(num_nodes, num_res_per_node);
@@ -45,10 +45,15 @@ int main(int argc, char* argv[]) {
   
   // time tick for the simulator in ms
   int time_tick = 10;
-  s.initialize(num_time_steps, time_tick, max_time_bet_jobs, inp_gen, 
-               cluster, scheduler);
+  simulator->initialize(num_time_steps, time_tick, max_time_bet_jobs, inp_gen, 
+                        cluster, scheduler);
   
-  s.run();  
+  simulator->run();  
+
+  delete inp_gen;
+  delete cluster;
+  delete scheduler;
+  delete simulator;
  
   return 0;
 

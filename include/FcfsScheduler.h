@@ -15,7 +15,7 @@ class FcfsScheduler : public Scheduler {
 public:
   FcfsScheduler() {}
 
-  ~FcfsScheduler() {}
+  virtual ~FcfsScheduler();
 
   virtual void initialize(int cluster_size, NodeResourcePairs* cluster_state);
 

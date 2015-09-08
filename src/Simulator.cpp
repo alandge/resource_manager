@@ -12,6 +12,13 @@
 
 Simulator::~Simulator() {
 
+  std::list<Job*>::iterator it=mJobs.begin();
+
+  while(it!=mJobs.end()) {
+    delete *it;
+    mJobs.erase(it++);
+    it++;
+  }
 }
 
 void Simulator::initialize(int num_timesteps, int time_delay, 
@@ -45,6 +52,7 @@ void Simulator::initialize(int num_timesteps, int time_delay,
     JobResourceTimePair job_time_pair = mInputGen->generateJob(mRandGenerator);
     
     Job* job = new Job(job_count++, job_time_pair.first, job_time_pair.second);
+    mTotalInputJobs++;
 
     initial_jobs.push_back(std::pair<int, Job*>(i, job));
     mJobs.push_back(job);
@@ -89,46 +97,42 @@ void Simulator::run() {
   for (int i=0; i<mNumTimesteps; i++) {
   //for (int i=0; ; i++) {
 
-    //std::cout << "\nTime : " << i+1 ;
+    std::cout << "\nTime : " << i+1 ;
     std::vector<Job*> new_jobs;
     
     if (--time_between_jobs == 0) {// && (job_count < max_jobs)) {
       JobResourceTimePair job_time_pair = mInputGen->generateJob(mRandGenerator);
 
       mTotalInputJobs++;
+      std::cout << "num input jobs: " << mTotalInputJobs << "\n";
 
-      //std::cout << "\nInput Job (jobId, resources, time):: ";
-            
       Job* job = new Job(job_count++, job_time_pair.first, job_time_pair.second);
       mJobs.push_back(job);
       new_jobs.push_back(job);
 
-      //std::cout << "(" << job->id() << ", " << job->numResources() 
-      //          << ", " << job->duration() << ")  ";
+      std::cout << "(" << job->id() << ", " << job->numResources() 
+                << ", " << job->duration() << ")  ";
 
       // randomly generate time delay in between input jobs
       time_between_jobs = time_dist(mRandGenerator);
     }
 
-    //std::cout << "\n";
+    std::cout << "\n";
 
     NodeResourcePairs* cluster_state = mCluster->updateState(); 
     NodeResourcePairs::iterator it;
 
-    //std::cout << "Cluster State (nodeId, avail_res) :: ";
-    //mCluster->printClusterState();
-   
     // Schedule jobs
     NodeJobPairs* scheduled_jobs = mScheduler->getScheduledJobs(new_jobs, 
                                                                 cluster_state);
     NodeJobPairs::iterator sj_it;
-   // std::cout << "Scheduled Jobs (nodeId, jobId) :: ";
-   // for (sj_it=scheduled_jobs->begin(); sj_it!=scheduled_jobs->end(); sj_it++) {
-   //   std::cout << "("  << sj_it->first 
-   //             << ", " << sj_it->second->id() << ")  ";
-   // }
-   // std::cout << "\n";
-    //mScheduler->printJobQ();
+    std::cout << "Scheduled Jobs (nodeId, jobId) :: ";
+    for (sj_it=scheduled_jobs->begin(); sj_it!=scheduled_jobs->end(); sj_it++) {
+      std::cout << "("  << sj_it->first 
+                << ", " << sj_it->second->id() << ")  ";
+    }
+    std::cout << "\n";
+    mScheduler->printJobQ();
 
 
     // Run jobs
@@ -137,15 +141,15 @@ void Simulator::run() {
     // Update job timings
     updateJobTimes();
 
-    //std::cout << "Cluster State (nodeId, avail_res) :: ";
-    //mCluster->printClusterState();
+    std::cout << "Cluster State (nodeId, avail_res) :: ";
+    mCluster->printClusterState();
         
     // Update statistics
     updateJobWaitTime(scheduled_jobs);
 
     // Remove completed jobs
     RemoveCompletedJobs();
-    //std::cout << "Mean Job Wait Time: " << meanJobWaitTime() << "\n";
+    std::cout << "Mean Job Wait Time: " << meanJobWaitTime() << "\n";
 
 
     delete cluster_state;

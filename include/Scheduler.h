@@ -17,7 +17,7 @@ class Scheduler {
 public:
 
   Scheduler() {}
-  ~Scheduler() {}
+  virtual ~Scheduler() {}
 
   virtual void initialize(int cluster_size, NodeResourcePairs* cluster_state) = 0;
 

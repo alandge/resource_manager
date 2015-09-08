@@ -9,8 +9,16 @@
 #include "FFDScheduler.h"
 #include <iostream>
 #include <cassert>
+ 
+FFDScheduler::~FFDScheduler() {
+  while (!mWaitTimeQ.empty()) {
+    mWaitTimeQ.pop();
+  }
 
-
+  while (!mJobQ.empty()) {
+    mJobQ.pop();
+  }
+}
 
 void FFDScheduler::initialize(int cluster_size, 
                                   NodeResourcePairs* cluster_state) {

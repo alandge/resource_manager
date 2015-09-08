@@ -18,10 +18,7 @@ JobResourceTimePair InputGenerator::generateJob(std::default_random_engine gener
   JobResourceTimePair job;
 
   unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
-  //std::default_random_engine generator(seed);
-  //std::default_random_engine generator(5);
 
-  //std::uniform_int_distribution<int> jobs_dist(0,mMaxJobsPerTimestep);
   std::uniform_int_distribution<int> resource_dist(1,mMaxResourcesPerNode);
   std::uniform_int_distribution<int> time_dist(1,mMaxTimePerJob);
     

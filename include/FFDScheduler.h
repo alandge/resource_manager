@@ -31,7 +31,7 @@ public :
 
   FFDScheduler(int max_job_wait_time) : mMaxJobWaitTime(max_job_wait_time){}
 
-  ~FFDScheduler() {}
+  virtual ~FFDScheduler();
 
   virtual void initialize(int cluster_size, NodeResourcePairs* cluster_state);
 
