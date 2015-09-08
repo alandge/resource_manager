@@ -27,10 +27,7 @@ class BestFitScheduler : public Scheduler {
 
 public :
 
-  BestFitScheduler(int threshold) { 
-    //mNodesStatus.resize(cluster_size, 0); 
-    mThreshold = threshold;
-  }
+  BestFitScheduler(int max_job_wait_time) : mMaxJobWaitTime(max_job_wait_time){}
 
   ~BestFitScheduler() {}
 
@@ -51,10 +48,10 @@ private:
   std::priority_queue<Job*, std::vector<Job*>, JobComp> mJobQ; 
 
 
-  std::queue<Job*> mWaitQ;
+  std::queue<Job*> mWaitTimeQ;
 
   //! Threshold for determining best fit
-  int mThreshold;
+  int mMaxJobWaitTime;
  
 
 };

@@ -43,39 +43,78 @@ NodeJobPairs* BestFitScheduler::getScheduledJobs(
     mJobQ.push(input_jobs[i]);
   }
 
-  
-  while(!mJobQ.empty()) {
-  
-    Job* job = mJobQ.top();
+  Job* job;
 
-    std::vector<NodeId_t>::iterator n_it;
+  // First check if any jobs have reached max wait time. Schedule those jobs on
+  // priority by waiting for resources to become available.
+  while (!mWaitTimeQ.empty()) {
+    job = mWaitTimeQ.front();
 
+    job->updateTime();
+    
     bool scheduled = false;
 
-    //for (n_it=mNodesStatus.begin(); n_it!=mNodesStatus.end(); n_it++) {
     for (int i=0 ; i<mNodesStatus.size(); i++) {
-      if ((mNodesStatus[i] >= job->numResources()) ){// && 
-          //(mNodesStatus[i] <= job->numResources() + mThreshold)  ) {
+      if ((mNodesStatus[i] >= job->numResources()) ){ 
         mScheduledJobs->push_back(std::pair<int, Job*>(i,job));
         mNodesStatus[i]-= job->numResources();
-        mJobQ.pop();
+        mWaitTimeQ.pop();
         scheduled = true;
         break;
       }
     }
 
-    // if no resources are available we push this on a separate waiting queue
     if (!scheduled) {
-      mWaitQ.push(job);
+      break;
+    }
+  }
+ 
+
+  // Go through the JobQ and update wait time. If no jobs are in the waitTimeQ
+  // try and schedule jobs from JobQ.
+
+  std::queue<Job*> tempQ;
+  
+  while(!mJobQ.empty()) {
+  
+    Job* job = mJobQ.top();
+    
+    // increment wait time
+    job->updateTime();
+
+    std::vector<NodeId_t>::iterator n_it;
+
+    bool scheduled = false;
+
+    if (mWaitTimeQ.empty()) {
+      for (int i=0 ; i<mNodesStatus.size(); i++) {
+        if ((mNodesStatus[i] >= job->numResources()) ){ 
+          mScheduledJobs->push_back(std::pair<int, Job*>(i,job));
+          mNodesStatus[i]-= job->numResources();
+          mJobQ.pop();
+          scheduled = true;
+          break;
+        }
+      }
+    }
+
+    // if no resources are available we wait till they are available
+    if (!scheduled) { 
+      if (job->waitTime() < mMaxJobWaitTime) {
+        tempQ.push(job);
+      }
+      else {
+        mWaitTimeQ.push(job);
+      }
+      
       mJobQ.pop();
-      //break;
     }
 
   }
 
-  while (!mWaitQ.empty()) {
-    mJobQ.push(mWaitQ.front());
-    mWaitQ.pop();
+  while (!tempQ.empty()) {
+    mJobQ.push(tempQ.front());
+    tempQ.pop();
   }
 
   return mScheduledJobs; 
@@ -84,10 +123,9 @@ NodeJobPairs* BestFitScheduler::getScheduledJobs(
 
 void BestFitScheduler::printJobQ() {
 
-  //std::cout << "JobQ: (id, resources, duration): ";
   std::priority_queue<Job*, std::vector<Job*>, JobComp> temp(mJobQ);
 
-  std::cerr << "JobQ: (id, resources, duration):";
+  std::cerr << "JobQ: (id, resources, duration)::";
     
   while(!temp.empty()) {
     
@@ -99,8 +137,8 @@ void BestFitScheduler::printJobQ() {
 
   std::cout << "\n";
 
-  std::cout << "WaitQ: (id, resources, duration): ";
-  std::queue<Job*> temp1(mWaitQ);
+  std::cout << "WaitQ: (id, resources, duration):: ";
+  std::queue<Job*> temp1(mWaitTimeQ);
     
   while(!temp1.empty()) {
     

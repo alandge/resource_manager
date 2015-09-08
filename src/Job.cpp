@@ -22,12 +22,17 @@ Job::Job(int id, int num_resources, int duration) {
 
 void Job::updateTime() {
 
-  assert(mExecutionTime <= mDuration);
-  if (mExecutionTime == mDuration) {
-    mStatus = COMPLETED;
+  if (mStatus == RUNNING) {
+    assert(mExecutionTime <= mDuration);
+    if (mExecutionTime == mDuration) {
+      mStatus = COMPLETED;
+    }
+    else {
+      mExecutionTime++;
+    }
   }
-  else {
-    mExecutionTime++;
+  else if (mStatus == QUEUED) {
+    mWaitTime++;
   }
 }
 

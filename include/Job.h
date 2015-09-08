@@ -28,6 +28,8 @@ public:
 
   int timeRemaining() {return mDuration - mExecutionTime; }
 
+  int waitTime() {return mWaitTime;}
+
   int duration() { return mDuration; }
 
   void updateTime();
