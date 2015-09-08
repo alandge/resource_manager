@@ -6,6 +6,22 @@
 
 #include "FcfsScheduler.h"
 #include <iostream>
+#include <cassert>
+
+void FcfsScheduler::initialize(int cluster_size, 
+                                  NodeResourcePairs* cluster_state) {
+  
+  mNodesStatus.resize(cluster_size);
+
+  NodeResourcePairs::iterator it;
+  for (it=cluster_state->begin(); it!=cluster_state->end(); it++ ) {
+    assert(it->first < mNodesStatus.size());
+    mNodesStatus[it->first] = it->second;
+  }
+
+}
+
+
 
 NodeJobPairs* FcfsScheduler :: getScheduledJobs(  
                               std::vector<Job*>& input_jobs,
@@ -17,6 +33,7 @@ NodeJobPairs* FcfsScheduler :: getScheduledJobs(
 
   // First update status of the nodes
   for (it=cluster_state->begin(); it!=cluster_state->end(); it++ ) {
+    assert(it->first < mNodesStatus.size());
     mNodesStatus[it->first] = it->second;
   }
 
@@ -32,16 +49,17 @@ NodeJobPairs* FcfsScheduler :: getScheduledJobs(
 
     std::map<NodeId_t, int>::iterator p_it;
 
-    for (p_it=mNodesStatus.begin(); p_it!=mNodesStatus.end(); p_it++) {
-      if (p_it->second >= job->numResources()) {
-        mScheduledJobs->push_back(std::pair<int, Job*>(p_it->first,job));
-        p_it->second-= job->numResources();
+    for (int i=0 ; i<mNodesStatus.size(); i++) {
+      if ((mNodesStatus[i] >= job->numResources()) ){ 
+        mScheduledJobs->push_back(std::pair<int, Job*>(i,job));
+        mNodesStatus[i]-= job->numResources();
         mJobQ.pop();
         break;
       }
     }
 
-    // if no resources are available we wait as this is fcfs
+    // if no resources are available we wait as this is fcfs and update time for
+    // rest of the jobs
     if (job == mJobQ.front())
       break;
   

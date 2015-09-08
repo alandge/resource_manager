@@ -13,6 +13,8 @@ ComputeCluster::ComputeCluster(int num_nodes, int resources_per_node) {
 
   mNumNodes = num_nodes;
   mNumResourcesPerNode = resources_per_node;
+  mMeanUtilization = 0.0f;
+  mUtilization = 0.0f;
 
   mNodes.resize(num_nodes);
   for (int i=0; i<num_nodes; i++) {
@@ -32,6 +34,7 @@ ComputeCluster::~ComputeCluster() {
 NodeResourcePairs* ComputeCluster::updateState() {
 
   NodeResourcePairs* status = new NodeResourcePairs();
+  int total_available_res = 0; 
 
   for (int i=0; i<mNodes.size(); i++) {
   
@@ -39,8 +42,12 @@ NodeResourcePairs* ComputeCluster::updateState() {
       status->push_back(std::pair<int, int> (mNodes[i]->id(), 
                                        mNodes[i]->availableResources()));
     }
+
+    total_available_res += mNodes[i]->availableResources();
   }
 
+  mUtilization = 1.0f - (float)(total_available_res)/(mNumNodes*mNumResourcesPerNode);
+  mMeanUtilization = (mMeanUtilization + mUtilization)/2;
   return status;
 }
 
@@ -63,5 +70,6 @@ void ComputeCluster::printClusterState() {
               << mNodes[i]->availableResources() << ")  "; 
   }
   std::cout << "\n";
+  std::cout << "Utilization :: " << mUtilization << "\n";
 }
 

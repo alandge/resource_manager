@@ -13,13 +13,13 @@
 //! Generate a vector of job tuples (resources, timesteps) when invoked
 // can extend this api to select different distributions for jobs, time and
 // resources
-JobResourceTimePair InputGenerator::generateJob() {
+JobResourceTimePair InputGenerator::generateJob(std::default_random_engine generator) {
 
   JobResourceTimePair job;
 
   unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
-  std::default_random_engine generator(seed);
-  //std::default_random_engine generator(0);
+  //std::default_random_engine generator(seed);
+  //std::default_random_engine generator(5);
 
   //std::uniform_int_distribution<int> jobs_dist(0,mMaxJobsPerTimestep);
   std::uniform_int_distribution<int> resource_dist(1,mMaxResourcesPerNode);

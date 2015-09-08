@@ -9,29 +9,47 @@ using namespace std;
 
 int main(int argc, char* argv[]) {
 
- /* if (argc < 4) {
-    cout << "Usage: <number of nodes> <num of resources per node> <max num of jobs per timestep> \
-      <max time per job>\n";
+  if (argc < 7) {
+    cout << "Usage: <num timesteps> <number of nodes> <num of resources per node> <max time per job> \
+      <max time between jobs> <schedular mode: FCFS = 0, FFD = 1> <max_job_wait_time>\n";
     return 0;
-  }*/
+  }
 
-//  int num_nodes = atoi(argv[1]);
-//  int num_res_per_node = atoi(argv[2]);
-//  int max_job_per_timestep = atoi(argv[3]);
-//  int max_time_per_job = atoi(argv[4]);
- 
+  int num_time_steps = atoi(argv[1]);
+  int num_nodes = atoi(argv[2]);
+  int num_res_per_node = atoi(argv[3]);
+  int max_time_per_job = atoi(argv[4]);
+  int max_time_bet_jobs = atoi(argv[5]);
+  int mode = atoi(argv[6]);
+  int max_job_wait_time;
+  
+  if (argc == 8)
+     max_job_wait_time = atoi(argv[7]);
+  else
+     max_job_wait_time = max_time_per_job*2;
+
+  std::cout << "max wait time: " << max_job_wait_time << "\n";
+
   Simulator s;
-  InputGenerator* inp_gen = new InputGenerator(2,8,0,10);
-  ComputeCluster* cluster = new ComputeCluster(2, 8);
-  //Scheduler* scheduler = new FcfsScheduler();
-  Scheduler* scheduler = new FFDScheduler(5);
+  InputGenerator* inp_gen = new InputGenerator(num_nodes, num_res_per_node,
+                                               max_time_per_job);
+  ComputeCluster* cluster = new ComputeCluster(num_nodes, num_res_per_node);
+
+  Scheduler* scheduler;
+  if (mode == 0)
+    scheduler = new FcfsScheduler();
+  else
+    scheduler = new FFDScheduler(max_job_wait_time);
 
   cout << "Num nodes: " << cluster->numNodes() << "\n";
-  s.initialize(10, 1, 1, inp_gen, cluster, scheduler);
+  
+  // time tick for the simulator in ms
+  int time_tick = 10;
+  s.initialize(num_time_steps, time_tick, max_time_bet_jobs, inp_gen, 
+               cluster, scheduler);
   
   s.run();  
  
-  cout << "hello world\n";
   return 0;
 
 }

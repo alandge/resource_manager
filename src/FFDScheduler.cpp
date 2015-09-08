@@ -52,7 +52,7 @@ NodeJobPairs* FFDScheduler::getScheduledJobs(
   while (!mWaitTimeQ.empty()) {
     job = mWaitTimeQ.front();
 
-    job->updateTime();
+    //job->updateTime();
     
     bool scheduled = false;
 
@@ -82,7 +82,7 @@ NodeJobPairs* FFDScheduler::getScheduledJobs(
     Job* job = mJobQ.top();
     
     // increment wait time
-    job->updateTime();
+    //job->updateTime();
 
     std::vector<NodeId_t>::iterator n_it;
 

@@ -28,11 +28,14 @@ public:
  int numNodes() {return mNumNodes;}
  int numResourcesPerNode() {return mNumResourcesPerNode;}
 
+ float getMeanUtilization() { return mMeanUtilization; }
  void printClusterState();
 
 private:
   int mNumNodes;
   int mNumResourcesPerNode;
+  float mUtilization;
+  float mMeanUtilization;
 
   std::vector<ComputeNode*> mNodes;
 

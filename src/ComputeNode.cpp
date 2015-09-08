@@ -26,7 +26,7 @@ bool ComputeNode::updateState() {
   JobList::iterator it = mJobs.begin();
 
   while( it != mJobs.end()) {
-    (*it)->updateTime();
+    //(*it)->updateTime();
     //if((*it)->status() == COMPLETED) {
     if((*it)->timeRemaining()==0) {
       mAvailableResources+= (*it)->numResources();

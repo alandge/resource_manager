@@ -21,7 +21,7 @@ class ComputeNode {
 public:
   ComputeNode(int id, int num_resources);
 
-  ~ComputeNode() {}
+  ~ComputeNode() { mJobs.clear(); }
 
   int id() { return mId; }
 

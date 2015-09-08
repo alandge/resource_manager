@@ -9,22 +9,23 @@
 #define INPUTGENERATOR_H
 
 #include <vector>
+#include <random>
+
 typedef std::vector< std::pair<int, int> > JobResourceTimePairs; 
 typedef std::pair<int, int> JobResourceTimePair;
 class InputGenerator {
 
 public:
   InputGenerator(int num_compute_nodes, int max_res_per_node, 
-                 int max_jobs_per_timestep, int max_time_per_job) : 
+                 int max_time_per_job) : 
                  mNumComputeNodes(num_compute_nodes), 
                  mMaxResourcesPerNode(max_res_per_node),
-                 mMaxJobsPerTimestep(max_jobs_per_timestep),
                  mMaxTimePerJob(max_time_per_job) {}
 
   ~InputGenerator() {}
 
 
-  JobResourceTimePair generateJob();
+  JobResourceTimePair generateJob(std::default_random_engine generator);
 
 
 private:

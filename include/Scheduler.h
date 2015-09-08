@@ -28,7 +28,8 @@ public:
   virtual void printJobQ() = 0;
 
 protected:
-  //! Scheduled jobs with tuples(nodeId, Job)
+  //! Scheduled jobs with tuples(nodeId, Job).
+  // Allocated on head and should be deleted by the simulator
   NodeJobPairs* mScheduledJobs;
 
   //std::queue<Job*> mJobQ;

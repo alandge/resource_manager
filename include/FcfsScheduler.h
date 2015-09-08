@@ -17,6 +17,8 @@ public:
 
   ~FcfsScheduler() {}
 
+  virtual void initialize(int cluster_size, NodeResourcePairs* cluster_state);
+
   virtual NodeJobPairs* getScheduledJobs(  
                               std::vector<Job*>& input_jobs,
                               NodeResourcePairs* cluster_status);
@@ -29,7 +31,7 @@ private:
   std::queue<Job*> mJobQ;
 
   //! Scheduler maintains state of every node in terms of available resources
-  std::map<NodeId_t, int> mNodesStatus;
+  std::vector<int> mNodesStatus;
  
 
 };
