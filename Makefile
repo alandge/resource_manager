@@ -4,7 +4,7 @@ INC_DIR = ./include
 BIN_DIR = ./bin
 OBJ = $(addprefix $(BIN_DIR)/, InputGenerator.o Job.o Simulator.o \
 			       ComputeNode.o ComputeCluster.o FcfsScheduler.o \
-			       BestFitScheduler.o )
+			       FFDScheduler.o )
 CXX = g++ 
 CFLAGS = -I $(INC_DIR)
 DEPS = $(INC_DIR)/%.h

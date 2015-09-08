@@ -1,16 +1,18 @@
-/* BestFitScheduler.cpp
+/* FFDScheduler.cpp
  *
- * Uses the best fit approach to assign a node to a job
+ * Uses the first fit decreasing approach to assign a node to a job. Maintains
+ * separate queue for jobs that have reached max wait time and give them
+ * priority over other jobs to avoid starvation.
  *
  */
 
-#include "BestFitScheduler.h"
+#include "FFDScheduler.h"
 #include <iostream>
 #include <cassert>
 
 
 
-void BestFitScheduler::initialize(int cluster_size, 
+void FFDScheduler::initialize(int cluster_size, 
                                   NodeResourcePairs* cluster_state) {
   
   mNodesStatus.resize(cluster_size);
@@ -25,7 +27,7 @@ void BestFitScheduler::initialize(int cluster_size,
 }
 
 
-NodeJobPairs* BestFitScheduler::getScheduledJobs(  
+NodeJobPairs* FFDScheduler::getScheduledJobs(  
                               std::vector<Job*>& input_jobs,
                               NodeResourcePairs* cluster_state) {
 
@@ -121,7 +123,7 @@ NodeJobPairs* BestFitScheduler::getScheduledJobs(
 
 }
 
-void BestFitScheduler::printJobQ() {
+void FFDScheduler::printJobQ() {
 
   std::priority_queue<Job*, std::vector<Job*>, JobComp> temp(mJobQ);
 

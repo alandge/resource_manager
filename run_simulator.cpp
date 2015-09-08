@@ -3,7 +3,7 @@
 #include "Simulator.h"
 #include "InputGenerator.h"
 #include "FcfsScheduler.h"
-#include "BestFitScheduler.h"
+#include "FFDScheduler.h"
 
 using namespace std;
 
@@ -24,7 +24,7 @@ int main(int argc, char* argv[]) {
   InputGenerator* inp_gen = new InputGenerator(2,8,0,10);
   ComputeCluster* cluster = new ComputeCluster(2, 8);
   //Scheduler* scheduler = new FcfsScheduler();
-  Scheduler* scheduler = new BestFitScheduler(5);
+  Scheduler* scheduler = new FFDScheduler(5);
 
   cout << "Num nodes: " << cluster->numNodes() << "\n";
   s.initialize(10, 1, 1, inp_gen, cluster, scheduler);
