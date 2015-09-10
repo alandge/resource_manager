@@ -91,7 +91,7 @@ void Simulator::run() {
   //int max_jobs = 20;
 
   // generate seed for random number generation
-    std::uniform_int_distribution<int> time_dist(1,mMaxTimeBetweenJobs);
+  std::uniform_int_distribution<int> time_dist(1,mMaxTimeBetweenJobs);
   int time_between_jobs =1;
 
   for (int i=0; i<mNumTimesteps; i++) {

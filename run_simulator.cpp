@@ -1,3 +1,6 @@
+
+// Author : Aaditya G. Landge
+
 #include <cstdio>
 #include <iostream>
 #include "Simulator.h"
